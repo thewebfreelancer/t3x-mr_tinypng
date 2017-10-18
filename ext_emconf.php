@@ -19,13 +19,13 @@ $EM_CONF[$_EXTKEY] = array (
 	'author_company' => '',
 	'state' => 'beta',
 	'clearCacheOnLoad' => 0,
-	'version' => '0.3.3',
+	'version' => '8.0.0-dev',
 	'constraints' =>
 	array (
 		'depends' =>
 		array (
-			'typo3' => '6.2.0-7.6.99',
-			'php' => '5.5.0-7.0.99',
+			'typo3' => '6.2.0-8.7.99',
+			'php' => '5.5.0-7.1.99',
 		),
 		'conflicts' =>
 		array (
