@@ -16,6 +16,7 @@ namespace Scarbous\MrTinypng\CMS\Core\Resource;
  */
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -60,7 +61,11 @@ class ProcessedFileRepository extends \TYPO3\CMS\Core\Resource\ProcessedFileRepo
         $itemList = new ObjectStorage();
         if ($rows !== null) {
             foreach ($rows as $row) {
-                $itemList->attach($this->createDomainObject($row));
+                try {
+                    $itemList->attach($this->createDomainObject($row));
+                } catch (\Exception $e) {
+                    $this->getLogger()->error($e->getCode() . ': ' . $e->getMessage(), $e->getTrace());
+                }
             }
         }
 
@@ -107,7 +112,11 @@ class ProcessedFileRepository extends \TYPO3\CMS\Core\Resource\ProcessedFileRepo
         $itemList = new ObjectStorage();
         if ($rows !== null) {
             foreach ($rows as $row) {
-                $itemList->attach($this->createDomainObject($row));
+                try {
+                    $itemList->attach($this->createDomainObject($row));
+                } catch (\Exception $e) {
+                    $this->getLogger()->error($e->getCode() . ': ' . $e->getMessage(), $e->getTrace());
+                }
             }
         }
 
@@ -163,5 +172,13 @@ class ProcessedFileRepository extends \TYPO3\CMS\Core\Resource\ProcessedFileRepo
         $queryBuilder->from($this->table);
 
         return $queryBuilder;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Log\Logger
+     */
+    protected function getLogger()
+    {
+        return GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
     }
 }
