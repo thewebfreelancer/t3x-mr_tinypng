@@ -104,9 +104,6 @@ class ProcessedFileRepository extends \TYPO3\CMS\Core\Resource\ProcessedFileRepo
     public function findNotReduced($limit = 0)
     {
         $queryBuilder = $this->notReducedQuery();
-        if ($limit > 0) {
-            $queryBuilder->setMaxResults($limit);
-        }
         $rows = $queryBuilder->execute();
 
         $itemList = new ObjectStorage();
@@ -116,6 +113,10 @@ class ProcessedFileRepository extends \TYPO3\CMS\Core\Resource\ProcessedFileRepo
                     $itemList->attach($this->createDomainObject($row));
                 } catch (\Exception $e) {
                     $this->getLogger()->error($e->getCode() . ': ' . $e->getMessage(), $e->getTrace());
+                }
+
+                if($limit > 0 && $itemList->count() >= $limit) {
+                    break;
                 }
             }
         }
